@@ -1,15 +1,19 @@
 from django.http import HttpResponse, HttpResponseNotFound
 from django.shortcuts import render
 
-def index(request):
-    return HttpResponse("Hello, world. You're at the polls index.")
+menu = ["О сайте", "Добавить статью", "Обратная связь", "Войти"]
 
-def categories(request,cat_id):
-    return HttpResponse(f"<h1> Hello, world. You're at the polls categories.</h1><p>id: {cat_id}</p>")
+def index(request):
+    data = {
+        'title':'Главная страница',
+        'menu': menu,
+    }
+    return render(request, 'craft/index.html',data)
+
+def about(request):
+    return render(request, 'craft/about.html',{'title': 'О сайте'})
 
 def categories_by_slug(request,cat_slug):
-    if request.Post:
-        print(request.POST)
     return HttpResponse(f"<h1> Hello, world. You're at the polls slug-categories.</h1><p>slug: {cat_slug}</p>")
 
 def page_not_found(request, exception):
