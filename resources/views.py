@@ -8,10 +8,10 @@ def index(request):
         'title':'Главная страница',
         'menu': menu,
     }
-    return render(request, 'craft/index.html',data)
+    return render(request, 'res/index.html',data)
 
 def about(request):
-    return render(request, 'craft/about.html',{'title': 'О сайте'})
+    return render(request, 'res/about.html',{'title': 'О сайте'})
 
 def categories_by_slug(request,cat_slug):
     return HttpResponse(f"<h1> Hello, world. You're at the polls slug-categories.</h1><p>slug: {cat_slug}</p>")
