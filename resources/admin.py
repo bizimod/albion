@@ -1,12 +1,12 @@
 from django.contrib import admin
 from django.utils.safestring import mark_safe
 
-from .models import Resources
+from .models import Resource
 
 
 # Register your models here.
 
-@admin.register(Resources)
+@admin.register(Resource)
 class ResourcesAdmin(admin.ModelAdmin):
     fields = ['name', 'tier', 'enchantment', 'type', 'res_image']
     # readonly_fields = ['show_image']

@@ -9,8 +9,8 @@ class ResourceType(models.TextChoices):
     REFINED = 'refined', 'Refined'
 
 
-class Resources(models.Model):
-    name = models.CharField(max_length=100, unique=True, verbose_name='Title')
+class Resource(models.Model):
+    name = models.CharField(max_length=100, verbose_name='Title')
     tier = models.IntegerField(verbose_name='Tier')
     enchantment = models.IntegerField(default=0, verbose_name='Enchantment')
     type = models.CharField(max_length=10, choices=ResourceType.choices, default=ResourceType.RAW, verbose_name='Type')
@@ -19,10 +19,25 @@ class Resources(models.Model):
 
     def clean(self):
         super().clean()
+
+        # словарь чтоб подсветить нужное поле
+
+        if self.tier < 1 or self.tier > 8:
+            raise ValidationError({'tier': 'Tier must be between 1 and 8!'})
+
         if self.tier < 4 and self.enchantment > 0:
-            raise ValidationError({
-                'enchantment': 'Enchanting is not possible for resources below tier 4!'})
-            # словарь чтоб подсветить именно поле Зачарование
+            raise ValidationError({'enchantment': 'Enchanting is not possible for resources below tier 4!'})
+
+        if self.enchantment < 0 or self.enchantment > 4:
+            raise ValidationError({'enchantment': 'Enchantment must be between 0 and 4!'})
+
+    class Meta:
+        verbose_name = 'Resource'
+        verbose_name_plural = 'Resources'
+        constraints = [
+            models.UniqueConstraint(fields=['name', 'tier', 'enchantment', 'type'],
+                                    name='unique_resource_by_name_tier_enchantment_type'),
+        ]
 
     def __str__(self):
         return f"{self.name} Tier: {self.tier} Enchantment: {self.enchantment} Type: {self.type}"
