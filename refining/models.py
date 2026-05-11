@@ -19,7 +19,7 @@ class RefiningRecipe(models.Model):
             raise ValidationError({'output_resource': 'The output resource must be refined'})
 
     def __str__(self):
-        return f'{self.output_resource.name}: {self.output_amount}'
+        return f'{self.output_resource.item_id} : {self.output_resource.display_name} : {self.output_amount}'
 
     class Meta:
         constraints = [

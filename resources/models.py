@@ -10,7 +10,8 @@ class ResourceType(models.TextChoices):
 
 
 class Resource(models.Model):
-    name = models.CharField(max_length=100, verbose_name='Title')
+    item_id = models.CharField(max_length=100, verbose_name='Item ID',unique=True)
+    display_name = models.CharField(max_length=100, verbose_name='Display Name')
     tier = models.IntegerField(verbose_name='Tier')
     enchantment = models.IntegerField(default=0, verbose_name='Enchantment')
     type = models.CharField(max_length=10, choices=ResourceType.choices, default=ResourceType.RAW, verbose_name='Type')
@@ -34,10 +35,10 @@ class Resource(models.Model):
     class Meta:
         verbose_name = 'Resource'
         verbose_name_plural = 'Resources'
-        constraints = [
-            models.UniqueConstraint(fields=['name', 'tier', 'enchantment', 'type'],
-                                    name='unique_resource_by_name_tier_enchantment_type'),
-        ]
+        # constraints = [
+        #     models.UniqueConstraint(fields=['item_id', 'tier', 'enchantment', 'type',],
+        #                             name='unique_resource_by_name_tier_enchantment_type'),
+        # ]
 
     def __str__(self):
-        return f"{self.name} Tier: {self.tier} Enchantment: {self.enchantment} Type: {self.type}"
+        return f"{self.display_name} Tier: {self.tier} Enchantment: {self.enchantment} "

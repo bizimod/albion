@@ -24,6 +24,7 @@ from resources.views import page_not_found
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('resources.urls')),
+    path('refining/', include('refining.urls')),
 ]
 
 if settings.DEBUG:
