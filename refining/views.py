@@ -17,7 +17,18 @@ def refining_calculation(request):
 
             recipe = RefiningRecipe.objects.get(output_resource=output_resource)
 
-            result = RefiningCalculation.calculate_from_output(recipe=recipe, desired_amount=amount, return_rate=return_rate)
+            raw_result = RefiningCalculation.calculate_to_raw(
+                recipe=recipe,
+                desired_amount=amount,
+                return_rate=return_rate
+            )
+
+            result = {
+                'output_resource': output_resource,
+                'desired_amount': amount,
+                'return_rate_percent': return_rate,
+                'raw_ingredients': raw_result.values(),
+            }
 
     else:
         form = RefiningCalculationForm()

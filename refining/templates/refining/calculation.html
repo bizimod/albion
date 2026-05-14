@@ -28,16 +28,15 @@
     <table border="1" cellpadding="10">
         <tr>
             <th>Resource / Ресурс</th>
-            <th>Without return / Без возврата</th>
-            <th>With return / С возвратом</th>
+            <th>Amount / Количество</th>
         </tr>
 
-        {% for ingredient in result.ingredients %}
+        {% for ingredient in result.raw_ingredients %}
             <tr>
                 <td>{{ ingredient.resource }}</td>
-                <td>{{ ingredient.amount_without_return|floatformat:-2 }}</td>
-                <td>{{ ingredient.amount_with_return|floatformat:-2 }}</td>
+                <td>{{ ingredient.amount|floatformat:-2 }}</td>
             </tr>
         {% endfor %}
+
     </table>
 {% endif %}

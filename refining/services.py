@@ -1,5 +1,8 @@
 from decimal import Decimal
 
+from refining.models import RefiningRecipe
+from resources.models import ResourceType
+
 
 class RefiningCalculation:
 
@@ -51,3 +54,54 @@ class RefiningCalculation:
             'return_rate_percent': return_rate_percent,
             'ingredients': result,
         }
+
+    @staticmethod
+    def calculate_to_raw(recipe, desired_amount, return_rate, visited=None):
+        """
+        Рекурсивно раскладывает готовый ресурс до сырых ресурсов.
+        Например:
+        T3_PLANKS -> T2_PLANKS + T3_WOOD
+        T2_PLANKS -> T2_WOOD
+
+        Итог:
+        T2_WOOD
+        T3_WOOD
+        """
+        if visited is None:
+            visited = set()
+        if recipe.id in visited:
+            raise ValueError(f'Cycle detected in recipe: {recipe}')
+
+        visited.add(recipe.id)
+
+        craft_count = RefiningCalculation._get_crafts_count(recipe=recipe, desired_amount=desired_amount)
+        result = {}
+
+        for ingredient in recipe.ingredients.all():
+            base_amount = Decimal(ingredient.amount) * craft_count
+            amount_with_return = RefiningCalculation._apply_return_rate(amount=base_amount, return_rate=return_rate)
+
+            resource = ingredient.resource
+
+            if resource.type == ResourceType.RAW:
+                if resource.id not in result:
+                    result[resource.id] = {'resource': resource, 'amount': Decimal('0')}
+
+                result[resource.id]['amount'] += amount_with_return
+
+            elif resource.type == ResourceType.REFINED:
+                try:
+                    sub_recipe = RefiningRecipe.objects.get(output_resource=resource)
+                except RefiningRecipe.DoesNotExist:
+                    raise ValueError(f'No refining recipe found for refined resource: {resource}')
+
+                sub_result = RefiningCalculation.calculate_to_raw(recipe=sub_recipe,
+                                                                  desired_amount=amount_with_return,
+                                                                  return_rate=return_rate,
+                                                                  visited=visited.copy())
+
+                for resource_id, data in sub_result.items():
+                    if resource_id not in result:
+                        result[resource_id] = {'resource': data['resource'], 'amount': Decimal('0')}
+                    result[resource_id]['amount'] += data['amount']
+        return result
