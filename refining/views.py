@@ -9,6 +9,7 @@ def refining_calculation(request):
 
     if request.method == 'POST':
         form = RefiningCalculationForm(request.POST)
+
         if form.is_valid():
             output_resource = form.cleaned_data['output_resource']
             amount = form.cleaned_data['amount']

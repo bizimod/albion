@@ -41,4 +41,6 @@ class Resource(models.Model):
         # ]
 
     def __str__(self):
-        return f"{self.display_name} Tier: {self.tier} Enchantment: {self.enchantment} "
+        enchantment_part = f'.{self.enchantment}' if self.enchantment else ''
+        title = self.display_name or self.item_id
+        return f'{title} T{self.tier}{enchantment_part}'

@@ -4,17 +4,17 @@
     {% csrf_token %}
     {{ form.as_p }}
 
-    <button type="submit">Calculate</button>
+    <button type="submit">Calculate / Рассчитать</button>
 </form>
 
 {% if result %}
     <hr>
 
-    <h2>Result</h2>
+    <h2>Result / Результат</h2>
 
     <p>
         You want / Ты хочешь:
-        {{ result.desired_amount }}
+        {{ result.desired_amount }} -
         {{ result.output_resource }}
     </p>
 
@@ -25,18 +25,18 @@
 
     <h3>Required ingredients / Требуемые ингредиенты:</h3>
 
-    <table border="1" cellpadding="8">
+    <table border="1" cellpadding="10">
         <tr>
-            <th>Resource</th>
-            <th>Without return</th>
-            <th>With return</th>
+            <th>Resource / Ресурс</th>
+            <th>Without return / Без возврата</th>
+            <th>With return / С возвратом</th>
         </tr>
 
         {% for ingredient in result.ingredients %}
             <tr>
                 <td>{{ ingredient.resource }}</td>
-                <td>{{ ingredient.amount_without_return }}</td>
-                <td>{{ ingredient.amount_with_return }}</td>
+                <td>{{ ingredient.amount_without_return|floatformat:-2 }}</td>
+                <td>{{ ingredient.amount_with_return|floatformat:-2 }}</td>
             </tr>
         {% endfor %}
     </table>
