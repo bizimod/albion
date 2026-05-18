@@ -1,3 +1,62 @@
+<style>
+    /* Современный шрифт и отступы для всей страницы */
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        color: #333;
+        line-height: 1.5;
+        max-width: 600px;
+        margin: 20px auto;
+        padding: 0 15px;
+    }
+
+    /* Стилизация формы */
+    input, select {
+        padding: 6px 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 14px;
+        margin-bottom: 10px;
+    }
+
+    /* Красивая кнопка */
+    button, input[type="submit"] {
+        background-color: #4CAF50; /* Зеленый цвет как в играх для крафта */
+        color: white;
+        padding: 8px 16px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+    button:hover, input[type="submit"]:hover {
+        background-color: #45a049;
+    }
+
+    /* Минималистичная таблица */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+    }
+    th, td {
+        padding: 10px;
+        text-align: left;
+        border-bottom: 1px solid #ddd; /* Легкая линия вместо жирной рамки */
+    }
+    th {
+        background-color: #f5f5f5;
+        font-weight: 600;
+    }
+    .result-card {
+    background-color: #fcfcfc; /* Очень легкий серый фон */
+    border: 1px solid #eaeaea; /* Тонкая, едва заметная рамка */
+    border-radius: 8px;        /* Красивые скругленные углы */
+    padding: 20px;             /* Внутренние отступы, чтобы тексту было свободно */
+    margin-top: 25px;          /* Отступ от верхней формы и кнопки */
+    box-shadow: 0 4px 6px rgba(0,0,0,0,02); /* Почти невидимая тень для объема */
+}
+</style>
+
 <h1>Refining Calculator</h1>
 
 <form method="post">
@@ -7,36 +66,61 @@
     <button type="submit">Calculate / Рассчитать</button>
 </form>
 
+
+
 {% if result %}
-    <hr>
+    <div class="result-card">
+        <hr>
 
-    <h2>Result / Результат</h2>
+        <h2>Result / Результат</h2>
 
-    <p>
-        You want / Ты хочешь:
-        {{ result.desired_amount }} -
-        {{ result.output_resource }}
-    </p>
+        <p style="display: inline-flex; align-items: center; gap: 8px; margin: 1em 0;">
+            <span>
+                You want / Ты хочешь:
+                {{ result.desired_amount }} -
+                {{ result.output_resource }}
+            </span>
+            {% if result.output_resource.res_image %}
+                <img src="{{ result.output_resource.res_image.url }}" width="32" style="display: block; shrink: 0;">
+            {% endif %}
+        </p>
 
-    <p>
-        Return rate / Процент возврата:
-        {{ result.return_rate_percent }}%
-    </p>
+        <p>
+            Return rate / Процент возврата:
+            {{ result.return_rate_percent }}%
+        </p>
 
-    <h3>Required ingredients / Требуемые ингредиенты:</h3>
+        <h3>Required ingredients / Требуемые ингредиенты:</h3>
 
-    <table border="1" cellpadding="10">
-        <tr>
-            <th>Resource / Ресурс</th>
-            <th>Amount / Количество</th>
-        </tr>
-
-        {% for ingredient in result.raw_ingredients %}
+        <table border="1" cellpadding="10">
             <tr>
-                <td>{{ ingredient.resource }}</td>
-                <td>{{ ingredient.amount|floatformat:-2 }}</td>
+                <th>Resource / Ресурс</th>
+                <th>Amount / Количество</th>
             </tr>
-        {% endfor %}
 
-    </table>
+            {% for ingredient in result.raw_ingredients %}
+                <tr>
+                    <td style="vertical-align: middle;">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            {% if ingredient.resource.res_image %}
+                                <img src="{{ ingredient.resource.res_image.url }}" width="32" style="display: block;">
+                            {% endif %}
+                        <span>{{ ingredient.resource }}</span>
+                        </div>
+                    </td>
+                    <td>{{ ingredient.amount|floatformat:-2 }}</td>
+                </tr>
+            {% endfor %}
+
+        </table>
+     </div>
+{% endif %}
+
+
+{% if error %}
+<hr>
+    <div class="error-card" style="background-color: #fff5f5; border: 1px solid #fed7d7; border-radius: 8px; padding: 20px; margin-top: 25px;">
+        <h2 style="color: #c53030; margin-top: 0;">Error / Ошибка:</h2>
+        <p style="color: #9b2c2c; margin-bottom: 0;">{{ error }}</p>
+    </div>
 {% endif %}

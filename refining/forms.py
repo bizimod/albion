@@ -2,7 +2,7 @@ from django import forms
 from resources.models import Resource, ResourceType
 
 
-class RefiningCalculationForm(forms.Form):
+class RefiningCalculatorForm(forms.Form):
     output_resource = forms.ModelChoiceField(queryset=Resource.objects.filter(type=ResourceType.REFINED),
                                              label='Output resource / Что хочешь получить', )
 
