@@ -37,8 +37,6 @@ class RefiningCalculator:
         чтобы получить desired_amount готового ресурса.
         """
         desired_amount = RefiningCalculator._to_decimal(desired_amount)
-        return_rate_percent = RefiningCalculator._to_decimal(return_rate)
-
         craft_count = RefiningCalculator._get_crafts_count(recipe=recipe, desired_amount=desired_amount)
 
         result = []
@@ -46,19 +44,13 @@ class RefiningCalculator:
         for ingredient in recipe.ingredients.all():
             base_amount = Decimal(ingredient.amount) * craft_count
             amount_with_return = RefiningCalculator._apply_return_rate(amount=base_amount, return_rate=return_rate)
+            final_amount = RefiningCalculator._to_decimal(amount_with_return)
 
             result.append({
                 'resource': ingredient.resource,
-                'amount_without_return': base_amount,
-                'amount_with_return': amount_with_return,
+                'amount': final_amount,
             })
-
-        return {
-            'output_resource': recipe.output_resource,
-            'desired_amount': desired_amount,
-            'return_rate_percent': return_rate_percent,
-            'ingredients': result,
-        }
+        return result
 
     @staticmethod
     def calculate_to_raw(recipe, desired_amount, return_rate, visited=None):
@@ -105,7 +97,8 @@ class RefiningCalculator:
                                                                  return_rate=return_rate,
                                                                  visited=visited.copy())
 
-                for resource_id, data in sub_result.items():
+                for data in sub_result:
+                    resource_id = data['resource'].id
                     if resource_id not in result:
                         result[resource_id] = {'resource': data['resource'], 'amount': Decimal('0')}
                     result[resource_id]['amount'] += data['amount']
@@ -113,4 +106,6 @@ class RefiningCalculator:
         for resource_data in result.values():
             resource_data['amount'] = RefiningCalculator._round_up(resource_data['amount'])
 
-        return dict(sorted(result.items(), key=lambda item: item[1]['resource'].tier))
+        sorted_result = sorted(result.values(), key=lambda item: item['resource'].tier)
+
+        return sorted_result

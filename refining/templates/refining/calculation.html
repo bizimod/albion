@@ -38,15 +38,31 @@
         border-collapse: collapse;
         margin-top: 15px;
     }
+    /* Общие отступы и линии для всех ячеек */
     th, td {
         padding: 10px;
-        text-align: left;
-        border-bottom: 1px solid #ddd; /* Легкая линия вместо жирной рамки */
+        border-bottom: 1px solid #ddd;
     }
+
+    /* Стили для текста в шапке (заголовках) */
     th {
-        background-color: #f5f5f5;
-        font-weight: 600;
+        background-color: #eaeaea; /* Сделали шапку чуть темнее, чтобы она выделялась */
+        font-weight: bold;         /* Жирный текст только для заголовков */
+        text-align: left;          /* Заголовки обычно выравнивают по левому краю */
     }
+
+    /* Стили для обычных ячеек с данными */
+    td {
+        font-weight: normal;       /* Обычный текст для ресурсов и цифр */
+        text-align: right;          /* Выравнивание по правому краю для аккуратности */
+    }
+
+    /* Красивая подсветка строки при наведении мыши */
+    tr:hover {
+        background-color: #f9f9f9; /* Мягкий светлый цвет подсветки */
+        transition: background-color 0.2s ease; /* Добавляет плавность изменению цвета */
+    }
+
     .result-card {
     background-color: #fcfcfc; /* Очень легкий серый фон */
     border: 1px solid #eaeaea; /* Тонкая, едва заметная рамка */
@@ -54,7 +70,8 @@
     padding: 20px;             /* Внутренние отступы, чтобы тексту было свободно */
     margin-top: 25px;          /* Отступ от верхней формы и кнопки */
     box-shadow: 0 4px 6px rgba(0,0,0,0,02); /* Почти невидимая тень для объема */
-}
+    }
+
 </style>
 
 <h1>Refining Calculator</h1>
