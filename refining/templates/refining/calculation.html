@@ -4,7 +4,7 @@
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         color: #333;
         line-height: 1.5;
-        max-width: 600px;
+        max-width: 800px;
         margin: 20px auto;
         padding: 0 15px;
     }
@@ -97,6 +97,7 @@
                 {{ result.desired_amount }} -
                 {{ result.output_resource }}
             </span>
+
             {% if result.output_resource.res_image %}
                 <img src="{{ result.output_resource.res_image.url }}" width="32" style="display: block; shrink: 0;">
             {% endif %}
@@ -107,35 +108,65 @@
             {{ result.return_rate_percent }}%
         </p>
 
+        <p>
+            Buy city / Город покупки: {{ result.buy_city }}
+        </p>
+        <p>
+            Sell city / Город продажи: {{ result.sell_city }}
+        </p>
+
         <h3>Required ingredients / Требуемые ингредиенты:</h3>
 
         <table border="1" cellpadding="10">
             <tr>
                 <th>Resource / Ресурс</th>
                 <th>Amount / Количество</th>
+                <th>Price / Цена</th>
+                <th>Total / Итого</th>
             </tr>
 
-            {% for ingredient in result.raw_ingredients %}
+            {% for ingredient in result.ingredients %}
                 <tr>
                     <td style="vertical-align: middle;">
                         <div style="display: flex; align-items: center; gap: 8px;">
                             {% if ingredient.resource.res_image %}
                                 <img src="{{ ingredient.resource.res_image.url }}" width="32" style="display: block;">
                             {% endif %}
-                        <span>{{ ingredient.resource }}</span>
+
+                            <span>{{ ingredient.resource }}</span>
                         </div>
                     </td>
+
                     <td>{{ ingredient.amount|floatformat:-2 }}</td>
+                    <td>{{ ingredient.price|floatformat:-2 }}</td>
+                    <td>{{ ingredient.total|floatformat:-2 }}</td>
                 </tr>
             {% endfor %}
-
         </table>
-     </div>
+
+            <p>
+            Total cost / Общая стоимость:
+            {{ result.total_cost|floatformat:-2 }} серебра
+        </p>
+            <p>
+            Output price / Цена готового ресурса:
+            {{ result.output_price|floatformat:-2 }} серебра
+        </p>
+            <p>
+            Output total / Стоимость готового ресурса:
+            {{ result.output_total|floatformat:-2 }} серебра
+        </p>
+            <p>
+            Profit / Прибыль:
+            {{ result.profit|floatformat:-2 }} серебра
+        </p>
+    </div>
 {% endif %}
 
 
 {% if error %}
-<hr>
+    <hr>
+
     <div class="error-card" style="background-color: #fff5f5; border: 1px solid #fed7d7; border-radius: 8px; padding: 20px; margin-top: 25px;">
         <h2 style="color: #c53030; margin-top: 0;">Error / Ошибка:</h2>
         <p style="color: #9b2c2c; margin-bottom: 0;">{{ error }}</p>

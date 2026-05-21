@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'resources.apps.ResourcesConfig',
     'refining.apps.RefiningConfig',
+    'market.apps.MarketConfig',
 ]
 
 MIDDLEWARE = [

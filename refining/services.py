@@ -2,6 +2,7 @@ from decimal import Decimal, ROUND_CEILING
 
 from refining.models import RefiningRecipe
 from resources.models import ResourceType
+from market.models import MarketPrice
 
 
 class RefiningCalculator:
@@ -44,7 +45,7 @@ class RefiningCalculator:
         for ingredient in recipe.ingredients.all():
             base_amount = Decimal(ingredient.amount) * craft_count
             amount_with_return = RefiningCalculator._apply_return_rate(amount=base_amount, return_rate=return_rate)
-            final_amount = RefiningCalculator._to_decimal(amount_with_return)
+            final_amount = RefiningCalculator._round_up(amount_with_return)
 
             result.append({
                 'resource': ingredient.resource,
@@ -109,3 +110,45 @@ class RefiningCalculator:
         sorted_result = sorted(result.values(), key=lambda item: item['resource'].tier)
 
         return sorted_result
+
+    @staticmethod
+    def add_prices_to_result(ingredients,city):
+        total_cost = Decimal('0')
+
+        priced_ingredients = []
+        for ingredient in ingredients:
+            resource = ingredient['resource']
+            amount = ingredient['amount']
+
+            try:
+                market_price = MarketPrice.objects.get(city=city, resource=resource)
+                price = Decimal(market_price.sell_price_min or 0)
+
+            except MarketPrice.DoesNotExist:
+                price = Decimal('0')
+
+            total = amount * price
+
+            priced_ingredients.append({
+                'resource': resource,
+                'amount': amount,
+                'price': price,
+                'total': total,
+            })
+            total_cost += total
+        return {
+            'ingredients': priced_ingredients,
+            'total_cost': total_cost,
+        }
+
+    @staticmethod
+    def get_resource_price(resource, city):
+        try:
+            market_price = MarketPrice.objects.get(
+                resource=resource,
+                city=city
+            )
+            return Decimal(market_price.sell_price_min or 0)
+
+        except MarketPrice.DoesNotExist:
+            return Decimal('0')
