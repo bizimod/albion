@@ -39,22 +39,48 @@ def refining_calculation(request):
 
                     ingredients_for_price = ingredients_list
 
-                price_result = RefiningCalculator.add_prices_to_result(ingredients=ingredients_for_price, city=buy_city, )
-                output_price = RefiningCalculator.get_resource_price(resource=output_resource, city=sell_city)
-                output_total = Decimal(amount) * output_price
-                profit = output_total - price_result['total_cost']
+                price_result = RefiningCalculator.add_prices_to_result(ingredients=ingredients_for_price,
+                                                                       city=buy_city, )
+                buy_method = form.cleaned_data['buy_method']
+                sell_method = form.cleaned_data['sell_method']
+                has_premium = form.cleaned_data['has_premium']
+                base_total_cost = price_result['total_cost']
 
+                total_cost_with_buy_fee = RefiningCalculator.apply_buy_fee(total_cost=base_total_cost,
+                                                                           buy_method=buy_method)
+
+                output_price = RefiningCalculator.get_resource_price(resource=output_resource, city=sell_city)
+
+                output_total = amount * output_price
+
+                sell_tax_result = RefiningCalculator.apply_sell_taxes(output_total=output_total,
+                                                                      sell_method=sell_method, has_premium=has_premium)
+
+                profit = sell_tax_result['output_after_tax'] - total_cost_with_buy_fee
                 result = {
+                    'buy_method': buy_method,
+                    'sell_method': sell_method,
+                    'has_premium': has_premium,
+
                     'output_resource': output_resource,
                     'desired_amount': amount,
                     'return_rate_percent': return_rate,
                     'calculation_type': calculation_type,
+
                     'buy_city': buy_city,
                     'sell_city': sell_city,
+
                     'ingredients': price_result['ingredients'],
-                    'total_cost': price_result['total_cost'],
+                    'base_total_cost': base_total_cost,
+                    'total_cost': total_cost_with_buy_fee,
+
                     'output_price': output_price,
                     'output_total': output_total,
+
+                    'sell_tax_rate': sell_tax_result['tax_rate'],
+                    'sell_tax_amount': sell_tax_result['tax_amount'],
+                    'output_after_tax': sell_tax_result['output_after_tax'],
+
                     'profit': profit,
                 }
 

@@ -71,6 +71,75 @@
     margin-top: 25px;          /* Отступ от верхней формы и кнопки */
     box-shadow: 0 4px 6px rgba(0,0,0,0,02); /* Почти невидимая тень для объема */
     }
+    .profit-positive {
+    color: #2f855a;
+    font-weight: 700;
+    }
+
+    .profit-negative {
+     color: #c53030;
+     font-weight: 700;
+    }
+    .summary-block {
+    margin-top: 20px;
+    }
+    .profit-card {
+        padding: 18px;
+        border-radius: 10px;
+        background-color: #f7fafc;
+        border: 1px solid #e2e8f0;
+        margin-bottom: 16px;
+    }
+    .profit-card-positive {
+        background-color: #f0fff4;
+        border-color: #9ae6b4;
+    }
+    .profit-card-negative {
+        background-color: #fff5f5;
+        border-color: #feb2b2;
+    }
+    .summary-profit {
+        font-size: 28px;
+        font-weight: 800;
+        margin-top: 4px;
+    }
+    .summary-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px;
+        margin-bottom: 16px;
+    }
+    .summary-item {
+        background-color: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 12px;
+    }
+    .summary-label {
+        font-size: 13px;
+        color: #666;
+        margin-bottom: 4px;
+    }
+    .summary-value {
+        font-size: 18px;
+        font-weight: 700;
+    }
+    .details-block {
+        background-color: #f7fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 12px;
+    }
+    .details-block summary {
+        cursor: pointer;
+        font-weight: 700;
+    }
+    .details-grid {
+        margin-top: 12px;
+    }
+    .details-grid p {
+        margin: 6px 0;
+    }
 
 </style>
 
@@ -144,23 +213,61 @@
             {% endfor %}
         </table>
 
-            <p>
-            Total cost / Общая стоимость:
-            {{ result.total_cost|floatformat:-2 }} серебра
-        </p>
-            <p>
-            Output price / Цена готового ресурса:
-            {{ result.output_price|floatformat:-2 }} серебра
-        </p>
-            <p>
-            Output total / Стоимость готового ресурса:
-            {{ result.output_total|floatformat:-2 }} серебра
-        </p>
-            <p>
-            Profit / Прибыль:
-            {{ result.profit|floatformat:-2 }} серебра
-        </p>
-    </div>
+           <div class="summary-block">
+                <div class="profit-card {% if result.profit > 0 %}profit-card-positive{% elif result.profit < 0 %}profit-card-negative{% endif %}">
+                    <div class="summary-label">Profit / Прибыль</div>
+                    <div class="summary-profit">
+                        {% if result.profit > 0 %}
+                            +{{ result.profit|floatformat:-2 }}
+                        {% else %}
+                            {{ result.profit|floatformat:-2 }}
+                        {% endif %}
+                        silver
+                    </div>
+                </div>
+
+                <div class="summary-grid">
+                    <div class="summary-item">
+                        <div class="summary-label">Resource cost / Стоимость ресурсов</div>
+                        <div class="summary-value">{{ result.total_cost|floatformat:-2 }}</div>
+                    </div>
+
+                    <div class="summary-item">
+                        <div class="summary-label">Output total / Выручка до налога</div>
+                        <div class="summary-value">{{ result.output_total|floatformat:-2 }}</div>
+                    </div>
+
+                    <div class="summary-item">
+                        <div class="summary-label">Tax / Налог</div>
+                        <div class="summary-value">{{ result.sell_tax_amount|floatformat:-2 }}</div>
+                    </div>
+
+                    <div class="summary-item">
+                        <div class="summary-label">After tax / После налога</div>
+                        <div class="summary-value">{{ result.output_after_tax|floatformat:-2 }}</div>
+                    </div>
+                </div>
+
+                <details class="details-block">
+                    <summary>Market details / Детали рынка</summary>
+
+                    <div class="details-grid">
+                        <p>Buy method / Способ покупки: {{ result.buy_method }}</p>
+                        <p>Sell method / Способ продажи: {{ result.sell_method }}</p>
+                        <p>Premium / Премиум:
+                            {% if result.has_premium %}
+                                Yes / Да
+                            {% else %}
+                                No / Нет
+                            {% endif %}
+                        </p>
+                        <p>Base resource cost / Без комиссии: {{ result.base_total_cost|floatformat:-2 }} silver</p>
+                        <p>Buy fee included / С комиссией покупки: {{ result.total_cost|floatformat:-2 }} silver</p>
+                        <p>Output price / Цена готового ресурса: {{ result.output_price|floatformat:-2 }} silver</p>
+                        <p>Sell tax rate / Налог продажи: {{ result.sell_tax_rate|floatformat:-2 }}%</p>
+                    </div>
+                </details>
+            </div>
 {% endif %}
 
 

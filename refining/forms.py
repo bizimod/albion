@@ -16,6 +16,16 @@ CALCULATION_CHOICES = [
     ('last_step', 'Last step only / Только последний шаг'),
 ]
 
+BUY_METHOD_CHOICES = [
+    ('buy_direct', 'Buy directly / Купить напрямую'),
+    ('buy_order', 'Buy order / Покупка через ордер'),
+]
+
+SELL_METHOD_CHOICES = [
+    ('sell_direct', 'Sell directly / Продажа напрямую'),
+    ('sell_order', 'Sell order / Продажа через ордер'),
+]
+
 
 class RefiningCalculatorForm(forms.Form):
     output_resource = forms.ModelChoiceField(queryset=Resource.objects.filter(type=ResourceType.REFINED),
@@ -32,3 +42,9 @@ class RefiningCalculatorForm(forms.Form):
     buy_city = forms.ChoiceField(choices=CITY_CHOICES, label='Buy city / Город покупки')
 
     sell_city = forms.ChoiceField(choices=CITY_CHOICES, label='Sell city / Город продажи')
+
+    buy_method = forms.ChoiceField(choices=BUY_METHOD_CHOICES, label='Buy method / Способ покупки')
+
+    sell_method = forms.ChoiceField(choices=SELL_METHOD_CHOICES, label='Sell method / Способ продажи')
+
+    has_premium = forms.BooleanField(required=False, initial=True, label='Premium / Премиум')

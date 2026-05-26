@@ -32,6 +32,38 @@ class RefiningCalculator:
         return base_amount * (Decimal('1') - return_rate_decimal)
 
     @staticmethod
+    def get_market_tax_rate(has_premium):
+        if has_premium:
+            return Decimal('0.04')
+        return Decimal('0.08')
+
+    @staticmethod
+    def get_order_fee_rate():
+        return Decimal('0.025')
+
+    @staticmethod
+    def apply_buy_fee(total_cost, buy_method):
+        total_cost = RefiningCalculator._to_decimal(total_cost)
+        if buy_method == 'buy_order':
+            return total_cost * (Decimal('1') + RefiningCalculator.get_order_fee_rate())
+        return total_cost
+
+    @staticmethod
+    def apply_sell_taxes(output_total, sell_method, has_premium):
+        output_total = RefiningCalculator._to_decimal(output_total)
+        market_tax_rate = RefiningCalculator.get_market_tax_rate(has_premium)
+        total_tax_rate = market_tax_rate
+        if sell_method == 'sell_order':
+            total_tax_rate += RefiningCalculator.get_order_fee_rate()
+        tax_amount = output_total * total_tax_rate
+        output_after_tax = output_total - tax_amount
+        return {
+            'tax_rate': total_tax_rate * Decimal('100'),
+            'tax_amount': tax_amount,
+            'output_after_tax': output_after_tax,
+        }
+
+    @staticmethod
     def calculate_from_output(recipe, desired_amount, return_rate):
         """
         Считает, сколько ингредиентов нужно,
@@ -152,3 +184,5 @@ class RefiningCalculator:
 
         except MarketPrice.DoesNotExist:
             return Decimal('0')
+
+
