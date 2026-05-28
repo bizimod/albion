@@ -1,4 +1,4 @@
-from decimal import Decimal, ROUND_CEILING
+from decimal import Decimal, ROUND_CEILING, ROUND_HALF_UP
 
 from refining.models import RefiningRecipe
 from resources.models import ResourceType
@@ -15,6 +15,11 @@ class RefiningCalculator:
     def _round_up(value):
         value = RefiningCalculator._to_decimal(value)
         return value.quantize(Decimal('1'), rounding=ROUND_CEILING)
+
+    @staticmethod
+    def _round_money(value):
+        value = RefiningCalculator._to_decimal(value)
+        return value.quantize(Decimal('1'), rounding=ROUND_HALF_UP)
 
     @staticmethod
     def _get_return_rate_decimal(return_rate):
@@ -46,21 +51,24 @@ class RefiningCalculator:
         total_cost = RefiningCalculator._to_decimal(total_cost)
         if buy_method == 'buy_order':
             return total_cost * (Decimal('1') + RefiningCalculator.get_order_fee_rate())
-        return total_cost
+        return RefiningCalculator._round_money(total_cost)
 
     @staticmethod
     def apply_sell_taxes(output_total, sell_method, has_premium):
         output_total = RefiningCalculator._to_decimal(output_total)
         market_tax_rate = RefiningCalculator.get_market_tax_rate(has_premium)
         total_tax_rate = market_tax_rate
+
         if sell_method == 'sell_order':
             total_tax_rate += RefiningCalculator.get_order_fee_rate()
+
         tax_amount = output_total * total_tax_rate
         output_after_tax = output_total - tax_amount
+
         return {
             'tax_rate': total_tax_rate * Decimal('100'),
-            'tax_amount': tax_amount,
-            'output_after_tax': output_after_tax,
+            'tax_amount': RefiningCalculator._round_money(tax_amount),
+            'output_after_tax': RefiningCalculator._round_money(output_after_tax),
         }
 
     @staticmethod
@@ -144,7 +152,7 @@ class RefiningCalculator:
         return sorted_result
 
     @staticmethod
-    def add_prices_to_result(ingredients,city):
+    def add_prices_to_result(ingredients, city):
         total_cost = Decimal('0')
 
         priced_ingredients = []
@@ -159,7 +167,7 @@ class RefiningCalculator:
             except MarketPrice.DoesNotExist:
                 price = Decimal('0')
 
-            total = amount * price
+            total = RefiningCalculator._round_money(amount * price)
 
             priced_ingredients.append({
                 'resource': resource,
@@ -170,7 +178,7 @@ class RefiningCalculator:
             total_cost += total
         return {
             'ingredients': priced_ingredients,
-            'total_cost': total_cost,
+            'total_cost': RefiningCalculator._round_money(total_cost),
         }
 
     @staticmethod
@@ -184,5 +192,3 @@ class RefiningCalculator:
 
         except MarketPrice.DoesNotExist:
             return Decimal('0')
-
-

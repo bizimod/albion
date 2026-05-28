@@ -86,9 +86,9 @@
                         </div>
                         <div class="profit-percent">
                             {% if result.profit_percent > 0 %}
-                                +{{ result.profit_percent|floatformat:2 }}%
+                                +{{ result.profit_percent|floatformat:1 }}%
                             {% else %}
-                                {{ result.profit_percent|floatformat:2 }}%
+                                {{ result.profit_percent|floatformat:1 }}%
                             {% endif %}
                             от затрат
                         </div>

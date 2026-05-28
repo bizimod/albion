@@ -61,12 +61,13 @@ def refining_calculation(request):
 
                 output_price = RefiningCalculator.get_resource_price(resource=output_resource, city=sell_city)
 
-                output_total = amount * output_price
+                output_total = RefiningCalculator._round_money(amount * output_price)
 
                 sell_tax_result = RefiningCalculator.apply_sell_taxes(output_total=output_total,
                                                                       sell_method=sell_method, has_premium=has_premium)
 
-                profit = sell_tax_result['output_after_tax'] - total_cost_with_buy_fee
+                profit = RefiningCalculator._round_money(sell_tax_result['output_after_tax'] - total_cost_with_buy_fee)
+
                 if total_cost_with_buy_fee > 0:
                     profit_percent = (profit / total_cost_with_buy_fee) * Decimal('100')
                 else:
