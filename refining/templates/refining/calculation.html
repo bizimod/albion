@@ -1,281 +1,150 @@
-<style>
-    /* Современный шрифт и отступы для всей страницы */
-    body {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        color: #333;
-        line-height: 1.5;
-        max-width: 800px;
-        margin: 20px auto;
-        padding: 0 15px;
-    }
+{% load static %}
+{% load humanize %}
+<link rel="stylesheet" href="{% static 'refining/css/calculator.css' %}">
 
-    /* Стилизация формы */
-    input, select {
-        padding: 6px 10px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        font-size: 14px;
-        margin-bottom: 10px;
-    }
+<div class="page-container">
+    <h1>Refining Calculator</h1>
 
-    /* Красивая кнопка */
-    button, input[type="submit"] {
-        background-color: #4CAF50; /* Зеленый цвет как в играх для крафта */
-        color: white;
-        padding: 8px 16px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        font-weight: bold;
-    }
-    button:hover, input[type="submit"]:hover {
-        background-color: #45a049;
-    }
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
 
-    /* Минималистичная таблица */
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 15px;
-    }
-    /* Общие отступы и линии для всех ячеек */
-    th, td {
-        padding: 10px;
-        border-bottom: 1px solid #ddd;
-    }
-
-    /* Стили для текста в шапке (заголовках) */
-    th {
-        background-color: #eaeaea; /* Сделали шапку чуть темнее, чтобы она выделялась */
-        font-weight: bold;         /* Жирный текст только для заголовков */
-        text-align: left;          /* Заголовки обычно выравнивают по левому краю */
-    }
-
-    /* Стили для обычных ячеек с данными */
-    td {
-        font-weight: normal;       /* Обычный текст для ресурсов и цифр */
-        text-align: right;          /* Выравнивание по правому краю для аккуратности */
-    }
-
-    /* Красивая подсветка строки при наведении мыши */
-    tr:hover {
-        background-color: #f9f9f9; /* Мягкий светлый цвет подсветки */
-        transition: background-color 0.2s ease; /* Добавляет плавность изменению цвета */
-    }
-
-    .result-card {
-    background-color: #fcfcfc; /* Очень легкий серый фон */
-    border: 1px solid #eaeaea; /* Тонкая, едва заметная рамка */
-    border-radius: 8px;        /* Красивые скругленные углы */
-    padding: 20px;             /* Внутренние отступы, чтобы тексту было свободно */
-    margin-top: 25px;          /* Отступ от верхней формы и кнопки */
-    box-shadow: 0 4px 6px rgba(0,0,0,0,02); /* Почти невидимая тень для объема */
-    }
-    .profit-positive {
-    color: #2f855a;
-    font-weight: 700;
-    }
-
-    .profit-negative {
-     color: #c53030;
-     font-weight: 700;
-    }
-    .summary-block {
-    margin-top: 20px;
-    }
-    .profit-card {
-        padding: 18px;
-        border-radius: 10px;
-        background-color: #f7fafc;
-        border: 1px solid #e2e8f0;
-        margin-bottom: 16px;
-    }
-    .profit-card-positive {
-        background-color: #f0fff4;
-        border-color: #9ae6b4;
-    }
-    .profit-card-negative {
-        background-color: #fff5f5;
-        border-color: #feb2b2;
-    }
-    .summary-profit {
-        font-size: 28px;
-        font-weight: 800;
-        margin-top: 4px;
-    }
-    .summary-grid {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 12px;
-        margin-bottom: 16px;
-    }
-    .summary-item {
-        background-color: #ffffff;
-        border: 1px solid #e2e8f0;
-        border-radius: 8px;
-        padding: 12px;
-    }
-    .summary-label {
-        font-size: 13px;
-        color: #666;
-        margin-bottom: 4px;
-    }
-    .summary-value {
-        font-size: 18px;
-        font-weight: 700;
-    }
-    .details-block {
-        background-color: #f7fafc;
-        border: 1px solid #e2e8f0;
-        border-radius: 8px;
-        padding: 12px;
-    }
-    .details-block summary {
-        cursor: pointer;
-        font-weight: 700;
-    }
-    .details-grid {
-        margin-top: 12px;
-    }
-    .details-grid p {
-        margin: 6px 0;
-    }
-
-</style>
-
-<h1>Refining Calculator</h1>
-
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-
-    <button type="submit">Calculate / Рассчитать</button>
-</form>
+        <button type="submit">Calculate / Рассчитать</button>
+    </form>
 
 
 
-{% if result %}
-    <div class="result-card">
+    {% if result %}
+        <div class="result-card">
+            <hr>
+
+            <h2>Result / Результат</h2>
+
+            <p style="display: inline-flex; align-items: center; gap: 8px; margin: 1em 0;">
+                <span>
+                    You want / Ты хочешь:
+                    {{ result.desired_amount }} -
+                    {{ result.output_resource }}
+                </span>
+
+                {% if result.output_resource.res_image %}
+                    <img src="{{ result.output_resource.res_image.url }}" width="32" style="display: block; shrink: 0;">
+                {% endif %}
+            </p>
+
+            <p>
+                Return rate / Процент возврата:
+                {{ result.return_rate_percent }}%
+            </p>
+
+            <p>
+                Buy city / Город покупки: {{ result.buy_city }}
+            </p>
+            <p>
+                Sell city / Город продажи: {{ result.sell_city }}
+            </p>
+
+            <h3>Required ingredients / Требуемые ингредиенты:</h3>
+
+            <table border="1" cellpadding="10">
+                <tr>
+                    <th>Resource / Ресурс</th>
+                    <th>Amount / Количество</th>
+                    <th>Price / Цена</th>
+                    <th>Total / Итого</th>
+                </tr>
+
+                {% for ingredient in result.ingredients %}
+                    <tr>
+                        <td style="vertical-align: middle;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                {% if ingredient.resource.res_image %}
+                                    <img src="{{ ingredient.resource.res_image.url }}" width="32" style="display: block;">
+                                {% endif %}
+
+                                <span>{{ ingredient.resource }}</span>
+                            </div>
+                        </td>
+
+                        <td>{{ ingredient.amount|floatformat:-2 }}</td>
+                        <td>{{ ingredient.price|floatformat:-2 }}</td>
+                        <td>{{ ingredient.total|floatformat:-2 }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+
+               <div class="summary-block">
+                    <div class="profit-card {% if result.profit > 0 %}profit-card-positive{% elif result.profit < 0 %}profit-card-negative{% endif %}">
+                        <div class="summary-label">Profit / Прибыль</div>
+                        <div class="summary-profit">
+                            {% if result.profit > 0 %}
+                                +{{ result.profit|floatformat:-2|intcomma }}
+                            {% else %}
+                                {{ result.profit|floatformat:-2|intcomma }}
+                            {% endif %}
+                            серебра
+                        </div>
+                        <div class="profit-percent">
+                            {% if result.profit_percent > 0 %}
+                                +{{ result.profit_percent|floatformat:2 }}%
+                            {% else %}
+                                {{ result.profit_percent|floatformat:2 }}%
+                            {% endif %}
+                            от затрат
+                        </div>
+                    </div>
+
+                    <div class="summary-grid">
+                        <div class="summary-item">
+                            <div class="summary-label">Resource cost / Стоимость ресурсов</div>
+                            <div class="summary-value">{{ result.total_cost|floatformat:-2|intcomma }}</div>
+                        </div>
+
+                        <div class="summary-item">
+                            <div class="summary-label">Output total / Выручка до налога</div>
+                            <div class="summary-value">{{ result.output_total|floatformat:-2|intcomma }}</div>
+                        </div>
+
+                        <div class="summary-item">
+                            <div class="summary-label">Tax / Налог</div>
+                            <div class="summary-value">{{ result.sell_tax_amount|floatformat:-2|intcomma }}</div>
+                        </div>
+
+                        <div class="summary-item">
+                            <div class="summary-label">After tax / После налога</div>
+                            <div class="summary-value">{{ result.output_after_tax|floatformat:-2|intcomma }}</div>
+                        </div>
+                    </div>
+
+                    <details class="details-block">
+                        <summary>Market details / Детали рынка</summary>
+
+                        <div class="details-grid">
+                            <p>Buy method / Способ покупки: {{ result.buy_method }}</p>
+                            <p>Sell method / Способ продажи: {{ result.sell_method }}</p>
+                            <p>Premium / Премиум:
+                                {% if result.has_premium %}
+                                    Yes / Да
+                                {% else %}
+                                    No / Нет
+                                {% endif %}
+                            </p>
+                            <p>Base resource cost / Без комиссии: {{ result.base_total_cost|floatformat:-2|intcomma }} silver</p>
+                            <p>Buy fee included / С комиссией покупки: {{ result.total_cost|floatformat:-2|intcomma }} silver</p>
+                            <p>Output price / Цена готового ресурса: {{ result.output_price|floatformat:-2|intcomma }} silver</p>
+                            <p>Sell tax rate / Налог продажи: {{ result.sell_tax_rate|floatformat:-2 }}%</p>
+                        </div>
+                    </details>
+                </div>
+    {% endif %}
+
+
+    {% if error %}
         <hr>
 
-        <h2>Result / Результат</h2>
-
-        <p style="display: inline-flex; align-items: center; gap: 8px; margin: 1em 0;">
-            <span>
-                You want / Ты хочешь:
-                {{ result.desired_amount }} -
-                {{ result.output_resource }}
-            </span>
-
-            {% if result.output_resource.res_image %}
-                <img src="{{ result.output_resource.res_image.url }}" width="32" style="display: block; shrink: 0;">
-            {% endif %}
-        </p>
-
-        <p>
-            Return rate / Процент возврата:
-            {{ result.return_rate_percent }}%
-        </p>
-
-        <p>
-            Buy city / Город покупки: {{ result.buy_city }}
-        </p>
-        <p>
-            Sell city / Город продажи: {{ result.sell_city }}
-        </p>
-
-        <h3>Required ingredients / Требуемые ингредиенты:</h3>
-
-        <table border="1" cellpadding="10">
-            <tr>
-                <th>Resource / Ресурс</th>
-                <th>Amount / Количество</th>
-                <th>Price / Цена</th>
-                <th>Total / Итого</th>
-            </tr>
-
-            {% for ingredient in result.ingredients %}
-                <tr>
-                    <td style="vertical-align: middle;">
-                        <div style="display: flex; align-items: center; gap: 8px;">
-                            {% if ingredient.resource.res_image %}
-                                <img src="{{ ingredient.resource.res_image.url }}" width="32" style="display: block;">
-                            {% endif %}
-
-                            <span>{{ ingredient.resource }}</span>
-                        </div>
-                    </td>
-
-                    <td>{{ ingredient.amount|floatformat:-2 }}</td>
-                    <td>{{ ingredient.price|floatformat:-2 }}</td>
-                    <td>{{ ingredient.total|floatformat:-2 }}</td>
-                </tr>
-            {% endfor %}
-        </table>
-
-           <div class="summary-block">
-                <div class="profit-card {% if result.profit > 0 %}profit-card-positive{% elif result.profit < 0 %}profit-card-negative{% endif %}">
-                    <div class="summary-label">Profit / Прибыль</div>
-                    <div class="summary-profit">
-                        {% if result.profit > 0 %}
-                            +{{ result.profit|floatformat:-2 }}
-                        {% else %}
-                            {{ result.profit|floatformat:-2 }}
-                        {% endif %}
-                        silver
-                    </div>
-                </div>
-
-                <div class="summary-grid">
-                    <div class="summary-item">
-                        <div class="summary-label">Resource cost / Стоимость ресурсов</div>
-                        <div class="summary-value">{{ result.total_cost|floatformat:-2 }}</div>
-                    </div>
-
-                    <div class="summary-item">
-                        <div class="summary-label">Output total / Выручка до налога</div>
-                        <div class="summary-value">{{ result.output_total|floatformat:-2 }}</div>
-                    </div>
-
-                    <div class="summary-item">
-                        <div class="summary-label">Tax / Налог</div>
-                        <div class="summary-value">{{ result.sell_tax_amount|floatformat:-2 }}</div>
-                    </div>
-
-                    <div class="summary-item">
-                        <div class="summary-label">After tax / После налога</div>
-                        <div class="summary-value">{{ result.output_after_tax|floatformat:-2 }}</div>
-                    </div>
-                </div>
-
-                <details class="details-block">
-                    <summary>Market details / Детали рынка</summary>
-
-                    <div class="details-grid">
-                        <p>Buy method / Способ покупки: {{ result.buy_method }}</p>
-                        <p>Sell method / Способ продажи: {{ result.sell_method }}</p>
-                        <p>Premium / Премиум:
-                            {% if result.has_premium %}
-                                Yes / Да
-                            {% else %}
-                                No / Нет
-                            {% endif %}
-                        </p>
-                        <p>Base resource cost / Без комиссии: {{ result.base_total_cost|floatformat:-2 }} silver</p>
-                        <p>Buy fee included / С комиссией покупки: {{ result.total_cost|floatformat:-2 }} silver</p>
-                        <p>Output price / Цена готового ресурса: {{ result.output_price|floatformat:-2 }} silver</p>
-                        <p>Sell tax rate / Налог продажи: {{ result.sell_tax_rate|floatformat:-2 }}%</p>
-                    </div>
-                </details>
-            </div>
-{% endif %}
-
-
-{% if error %}
-    <hr>
-
-    <div class="error-card" style="background-color: #fff5f5; border: 1px solid #fed7d7; border-radius: 8px; padding: 20px; margin-top: 25px;">
-        <h2 style="color: #c53030; margin-top: 0;">Error / Ошибка:</h2>
-        <p style="color: #9b2c2c; margin-bottom: 0;">{{ error }}</p>
-    </div>
-{% endif %}
+        <div class="error-card" style="background-color: #fff5f5; border: 1px solid #fed7d7; border-radius: 8px; padding: 20px; margin-top: 25px;">
+            <h2 style="color: #c53030; margin-top: 0;">Error / Ошибка:</h2>
+            <p style="color: #9b2c2c; margin-bottom: 0;">{{ error }}</p>
+        </div>
+    {% endif %}
+</div>

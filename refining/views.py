@@ -3,6 +3,7 @@ from decimal import Decimal
 from .forms import RefiningCalculatorForm
 from .models import RefiningRecipe
 from .services import RefiningCalculator
+from resources.models import Resource, ResourceType, ResourceCategory
 
 
 def refining_calculation(request):
@@ -14,7 +15,16 @@ def refining_calculation(request):
 
         try:
             if form.is_valid():
-                output_resource = form.cleaned_data['output_resource']
+                resource_category = form.cleaned_data['resource_category']
+                tier = form.cleaned_data['tier']
+                enchantment = form.cleaned_data['enchantment']
+                output_resource = Resource.objects.get(
+                    category=resource_category,
+                    tier=tier,
+                    enchantment=enchantment,
+                    type=ResourceType.REFINED,
+                )
+
                 amount = form.cleaned_data['amount']
                 return_rate = form.cleaned_data['return_rate']
                 calculation_type = form.cleaned_data['calculation_type']
@@ -57,6 +67,10 @@ def refining_calculation(request):
                                                                       sell_method=sell_method, has_premium=has_premium)
 
                 profit = sell_tax_result['output_after_tax'] - total_cost_with_buy_fee
+                if total_cost_with_buy_fee > 0:
+                    profit_percent = (profit / total_cost_with_buy_fee) * Decimal('100')
+                else:
+                    profit_percent = Decimal('0')
                 result = {
                     'buy_method': buy_method,
                     'sell_method': sell_method,
@@ -82,10 +96,13 @@ def refining_calculation(request):
                     'output_after_tax': sell_tax_result['output_after_tax'],
 
                     'profit': profit,
+                    'profit_percent': profit_percent,
                 }
 
         except RefiningRecipe.DoesNotExist:
             error = "Recipe for this resource was not found / Рецепт для этого ресурса не найден."
+        except Resource.DoesNotExist:
+            error = "Resource with selected parameters was not found / Ресурс с выбранными параметрами не найден."
         except ValueError as e:
             error = str(e)
     else:

@@ -9,12 +9,21 @@ class ResourceType(models.TextChoices):
     REFINED = 'refined', 'Refined'
 
 
+class ResourceCategory(models.TextChoices):
+    WOOD = 'wood', 'Wood'
+    ORE = 'ore', 'Ore'
+    FIBER = 'fiber', 'Fiber'
+    HIDE = 'hide', 'Hide'
+    STONE = 'stone', 'Stone'
+
+
 class Resource(models.Model):
-    item_id = models.CharField(max_length=100, verbose_name='Item ID',unique=True)
+    item_id = models.CharField(max_length=100, verbose_name='Item ID', unique=True)
     display_name = models.CharField(max_length=100, verbose_name='Display Name')
     tier = models.IntegerField(verbose_name='Tier')
     enchantment = models.IntegerField(default=0, verbose_name='Enchantment')
     type = models.CharField(max_length=10, choices=ResourceType.choices, default=ResourceType.RAW, verbose_name='Type')
+    category = models.CharField(choices=ResourceCategory.choices, verbose_name='Category')
     res_image = models.ImageField(upload_to='res_image/%Y/%m/%d/', default=None, blank=True, null=True,
                                   verbose_name='Image')
 

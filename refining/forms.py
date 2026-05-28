@@ -1,5 +1,5 @@
 from django import forms
-from resources.models import Resource, ResourceType
+from resources.models import Resource, ResourceType,ResourceCategory
 
 CITY_CHOICES = [
     ('Bridgewatch', 'Bridgewatch'),
@@ -28,8 +28,9 @@ SELL_METHOD_CHOICES = [
 
 
 class RefiningCalculatorForm(forms.Form):
-    output_resource = forms.ModelChoiceField(queryset=Resource.objects.filter(type=ResourceType.REFINED),
-                                             label='Output resource / Что хочешь получить', )
+    resource_category = forms.ChoiceField(choices=ResourceCategory.choices, label='Resource type / Тип ресурса' )
+    tier = forms.ChoiceField( choices=[(tier, f'T{tier}') for tier in range(2, 9)], label='Tier / Тир' )
+    enchantment = forms.ChoiceField( choices=[ (0, '0'), (1, '1'), (2, '2'), (3, '3'), (4, '4'), ], initial=0, label='Enchantment / Зачарование' )
 
     amount = forms.DecimalField(min_value=1, initial=1, label='Amount / Количество')
 

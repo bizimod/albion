@@ -8,9 +8,10 @@ from .models import Resource
 
 @admin.register(Resource)
 class ResourcesAdmin(admin.ModelAdmin):
-    fields = ['item_id', 'display_name', 'tier', 'enchantment', 'type', 'res_image']
+    fields = ['item_id', 'display_name', 'tier', 'enchantment', 'type', 'res_image', 'category']
     # readonly_fields = ['show_image']
-    list_display = ['item_id', 'display_name', 'tier', 'enchantment', 'type', 'show_image']
+    list_display = ['item_id', 'display_name', 'tier', 'enchantment', 'type', 'category', 'show_image']
+    list_filter = ['type','category',]
     search_fields = ['item_id', 'display_name', 'tier', 'enchantment', 'type']
     list_display_links = ['item_id']
     list_per_page = 10
