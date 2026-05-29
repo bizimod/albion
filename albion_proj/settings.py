@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'resources.apps.ResourcesConfig',
     'refining.apps.RefiningConfig',
     'market.apps.MarketConfig',
+    'crafting.apps.CraftingConfig',
 ]
 
 MIDDLEWARE = [
