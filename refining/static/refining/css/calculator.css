@@ -5,7 +5,7 @@ body {
 }
 
 .page-container {
-    max-width: 800px;
+    max-width: 900px;
     margin: 20px auto;
     padding: 0 15px;
 }
@@ -45,6 +45,7 @@ th,
 td {
     padding: 10px;
     border-bottom: 1px solid #ddd;
+    vertical-align: middle;
 }
 
 th {
@@ -56,6 +57,50 @@ th {
 td {
     font-weight: 400;
     text-align: right;
+}
+
+.col-resource {
+    width: auto;
+    text-align: left;
+}
+
+.col-amount {
+    width: 80px;
+    white-space: nowrap;
+}
+
+.col-price {
+    width: 90px;
+    white-space: nowrap;
+}
+
+.col-updated {
+    width: 145px;
+    white-space: nowrap;
+    text-align: center
+}
+
+.col-total {
+    width: 100px;
+    white-space: nowrap;
+}
+
+.resource-cell {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+}
+
+.resource-cell img {
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+    display: block;
+}
+
+.resource-cell span {
+    white-space: nowrap;
 }
 
 tr:hover {

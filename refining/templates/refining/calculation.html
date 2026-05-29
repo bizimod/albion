@@ -44,31 +44,54 @@
                 Sell city / Город продажи: {{ result.sell_city }}
             </p>
 
+            {% if result.price_update_error %}
+                <div class="error-card">
+                    {{ result.price_update_error }}
+                </div>
+            {% endif %}
+
             <h3>Required ingredients / Требуемые ингредиенты:</h3>
 
             <table border="1" cellpadding="10">
                 <tr>
-                    <th>Resource / Ресурс</th>
-                    <th>Amount / Количество</th>
-                    <th>Price / Цена</th>
-                    <th>Total / Итого</th>
+                    <th class="col-resource">Resource / Ресурс</th>
+                    <th class="col-amount">Amount / Количество</th>
+                    <th class="col-price">Price / Цена</th>
+                    <th class="col-updated">Updated / Обновлено</th>
+                    <th class="col-total">Total / Итого</th>
                 </tr>
 
                 {% for ingredient in result.ingredients %}
                     <tr>
-                        <td style="vertical-align: middle;">
-                            <div style="display: flex; align-items: center; gap: 8px;">
+                        <td class="col-resource">
+                            <div class="resource-cell">
                                 {% if ingredient.resource.res_image %}
-                                    <img src="{{ ingredient.resource.res_image.url }}" width="32" style="display: block;">
+                                    <img src="{{ ingredient.resource.res_image.url }}" width="32">
                                 {% endif %}
 
                                 <span>{{ ingredient.resource }}</span>
                             </div>
                         </td>
 
-                        <td>{{ ingredient.amount|floatformat:-2 }}</td>
-                        <td>{{ ingredient.price|floatformat:-2 }}</td>
-                        <td>{{ ingredient.total|floatformat:-2 }}</td>
+                        <td class="col-amount">
+                            {{ ingredient.amount|floatformat:0|intcomma }}
+                        </td>
+
+                        <td class="col-price">
+                            {{ ingredient.price|floatformat:0|intcomma }}
+                        </td>
+
+                        <td class="col-updated">
+                            {% if ingredient.updated_at %}
+                                {{ ingredient.updated_at|date:"d.m.Y H:i" }}
+                            {% else %}
+                                No data
+                            {% endif %}
+                        </td>
+
+                        <td class="col-total">
+                            {{ ingredient.total|floatformat:0|intcomma }}
+                        </td>
                     </tr>
                 {% endfor %}
             </table>

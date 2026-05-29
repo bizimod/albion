@@ -19,11 +19,12 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path,include
 from resources import views
+from refining.views import refining_calculation
 from resources.views import page_not_found
 
 urlpatterns = [
+    path('', refining_calculation, name='home'),
     path('admin/', admin.site.urls),
-    path('', include('resources.urls')),
     path('refining/', include('refining.urls')),
 ]
 

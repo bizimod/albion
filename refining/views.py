@@ -4,7 +4,7 @@ from .forms import RefiningCalculatorForm
 from .models import RefiningRecipe
 from .services import RefiningCalculator
 from resources.models import Resource, ResourceType, ResourceCategory
-
+from market.services import AlbionMarketService
 
 def refining_calculation(request):
     result = None
@@ -49,6 +49,15 @@ def refining_calculation(request):
 
                     ingredients_for_price = ingredients_list
 
+                resources_to_update = [ingredient['resource'] for ingredient in ingredients_for_price]
+                resources_to_update.append(output_resource)
+                try:
+                    AlbionMarketService.update_prices_for_resources(resources_to_update)
+                except Exception as e:
+                    price_update_error = f"Prices could not be updated / Не удалось обновить цены: {e}"
+                else:
+                    price_update_error = None
+
                 price_result = RefiningCalculator.add_prices_to_result(ingredients=ingredients_for_price,
                                                                        city=buy_city, )
                 buy_method = form.cleaned_data['buy_method']
@@ -88,6 +97,7 @@ def refining_calculation(request):
                     'ingredients': price_result['ingredients'],
                     'base_total_cost': base_total_cost,
                     'total_cost': total_cost_with_buy_fee,
+                    'price_update_error': price_update_error,
 
                     'output_price': output_price,
                     'output_total': output_total,

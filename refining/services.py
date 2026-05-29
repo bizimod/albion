@@ -163,9 +163,11 @@ class RefiningCalculator:
             try:
                 market_price = MarketPrice.objects.get(city=city, resource=resource)
                 price = Decimal(market_price.sell_price_min or 0)
+                updated_at = market_price.updated_at
 
             except MarketPrice.DoesNotExist:
                 price = Decimal('0')
+                updated_at = None
 
             total = RefiningCalculator._round_money(amount * price)
 
@@ -174,6 +176,7 @@ class RefiningCalculator:
                 'amount': amount,
                 'price': price,
                 'total': total,
+                'updated_at': updated_at,
             })
             total_cost += total
         return {
