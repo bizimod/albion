@@ -212,3 +212,18 @@ tr:hover {
 .details-grid p {
     margin: 6px 0;
 }
+.city-profit-table {
+    margin-top: 12px;
+    font-size: 14px;
+}
+
+.city-profit-table th,
+.city-profit-table td {
+    padding: 8px;
+    white-space: nowrap;
+}
+
+.selected-city-row {
+    background-color: #ebf8ff;
+    font-weight: 700;
+}

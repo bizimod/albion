@@ -5,6 +5,7 @@ from .models import RefiningRecipe
 from .services import RefiningCalculator
 from resources.models import Resource, ResourceType, ResourceCategory
 from market.services import AlbionMarketService
+from .forms import CITY_CHOICES
 
 def refining_calculation(request):
     result = None
@@ -68,6 +69,20 @@ def refining_calculation(request):
                 total_cost_with_buy_fee = RefiningCalculator.apply_buy_fee(total_cost=base_total_cost,
                                                                            buy_method=buy_method)
 
+                cities = [
+                    city_value
+                    for city_value, city_label in CITY_CHOICES
+                ]
+
+                city_profit_results = RefiningCalculator.calculate_profit_by_city(
+                    output_resource=output_resource,
+                    amount=amount,
+                    total_cost=total_cost_with_buy_fee,
+                    sell_method=sell_method,
+                    has_premium=has_premium,
+                    cities=cities,
+                )
+
                 output_price = RefiningCalculator.get_resource_price(resource=output_resource, city=sell_city)
 
                 output_total = RefiningCalculator._round_money(amount * output_price)
@@ -108,6 +123,8 @@ def refining_calculation(request):
 
                     'profit': profit,
                     'profit_percent': profit_percent,
+
+                    'city_profit_results': city_profit_results,
                 }
 
         except RefiningRecipe.DoesNotExist:

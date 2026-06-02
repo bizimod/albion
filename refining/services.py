@@ -195,3 +195,31 @@ class RefiningCalculator:
 
         except MarketPrice.DoesNotExist:
             return Decimal('0')
+
+    @staticmethod
+    def calculate_profit_by_city(output_resource, amount, total_cost, sell_method, has_premium, cities):
+        result = []
+
+        amount = RefiningCalculator._to_decimal(amount)
+        total_cost = RefiningCalculator._to_decimal(total_cost)
+
+        for city in cities:
+            output_price = RefiningCalculator.get_resource_price(resource=output_resource, city=city)
+            output_total = RefiningCalculator._round_money(output_price * amount)
+            sell_tax_result = RefiningCalculator.apply_sell_taxes(output_total=output_total, sell_method=sell_method,
+                                                                  has_premium=has_premium)
+            profit = RefiningCalculator._round_money(sell_tax_result['output_after_tax']-total_cost)
+            if total_cost>0:
+                profit_percent = (profit/total_cost)*Decimal('100')
+            else:
+                profit_percent = Decimal('0')
+            result.append({
+                'city': city,
+                'output_price': output_price,
+                'output_total': output_total,
+                'sell_tax_amount': sell_tax_result['tax_amount'],
+                'output_after_tax': sell_tax_result['output_after_tax'],
+                'profit': profit,
+                'profit_percent': profit_percent,
+            })
+        return sorted(result, key=lambda item: item['profit'], reverse=True)

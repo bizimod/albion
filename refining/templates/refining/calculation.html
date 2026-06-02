@@ -158,6 +158,48 @@
                             <p>Sell tax rate / Налог продажи: {{ result.sell_tax_rate|floatformat:-2 }}%</p>
                         </div>
                     </details>
+
+                    <details class="details-block">
+                        <summary>City profit comparison / Сравнение прибыли по городам</summary>
+
+                        <table class="city-profit-table">
+                            <tr>
+                                <th>City / Город</th>
+                                <th>Output price / Цена</th>
+                                <th>Revenue / Выручка</th>
+                                <th>Tax / Налог</th>
+                                <th>After tax / После налога</th>
+                                <th>Profit / Прибыль</th>
+                                <th>ROI / %</th>
+                            </tr>
+
+                            {% for city_result in result.city_profit_results %}
+                                <tr class="{% if city_result.city == result.sell_city %}selected-city-row{% endif %}">
+                                    <td>{{ city_result.city }}</td>
+                                    <td>{{ city_result.output_price|floatformat:0|intcomma }}</td>
+                                    <td>{{ city_result.output_total|floatformat:0|intcomma }}</td>
+                                    <td>{{ city_result.sell_tax_amount|floatformat:0|intcomma }}</td>
+                                    <td>{{ city_result.output_after_tax|floatformat:0|intcomma }}</td>
+
+                                    <td class="{% if city_result.profit > 0 %}profit-positive{% elif city_result.profit < 0 %}profit-negative{% endif %}">
+                                        {% if city_result.profit > 0 %}
+                                            +{{ city_result.profit|floatformat:0|intcomma }}
+                                        {% else %}
+                                            {{ city_result.profit|floatformat:0|intcomma }}
+                                        {% endif %}
+                                    </td>
+
+                                    <td class="{% if city_result.profit_percent > 0 %}profit-positive{% elif city_result.profit_percent < 0 %}profit-negative{% endif %}">
+                                        {% if city_result.profit_percent > 0 %}
+                                            +{{ city_result.profit_percent|floatformat:1 }}%
+                                        {% else %}
+                                            {{ city_result.profit_percent|floatformat:1 }}%
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </details>
                 </div>
     {% endif %}
 
