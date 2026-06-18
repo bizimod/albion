@@ -18,6 +18,9 @@
 
 ❗ Модуль крафта предметов в настоящее время находится в разработке. ❗
 
+<details>
+<summary><b> Скриншоты (нажмите, чтобы развернуть)</b></summary>
+
 ### 🖼️ Скриншоты: 
 
 # Refining calculator
@@ -26,9 +29,7 @@
 # Result
 ![Refining calculator](docs/images/result.png)
 
-<details>
-<summary><b>Market details & City Comparison (нажмите, чтобы развернуть)</b></summary>
-
+# Market details & City Comparison
 ![Refining calculator](docs/images/market-details-city-comparison.png)
 </details>
 
