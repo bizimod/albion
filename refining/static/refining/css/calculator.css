@@ -5,7 +5,7 @@ body {
 }
 
 .page-container {
-    max-width: 900px;
+    max-width: 950px;
     margin: 20px auto;
     padding: 0 15px;
 }
@@ -211,4 +211,55 @@ tr:hover {
 
 .details-grid p {
     margin: 6px 0;
+}
+.city-profit-table {
+    margin-top: 12px;
+    font-size: 14px;
+}
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.city-profit-table {
+    width: 100%;
+    min-width: 820px;
+    margin-top: 12px;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.city-profit-table th,
+.city-profit-table td {
+    padding: 8px 7px;
+    border-bottom: 1px solid #ddd;
+    white-space: nowrap;
+}
+
+.city-profit-table th {
+    background-color: #eaeaea;
+    font-weight: 700;
+    text-align: left;
+}
+
+.city-profit-table .city-col {
+    text-align: left;
+}
+
+.city-profit-table .price-col,
+.city-profit-table .revenue-col,
+.city-profit-table .tax-col,
+.city-profit-table .after-tax-col,
+.city-profit-table .profit-col,
+.city-profit-table .roi-col {
+    text-align: right;
+}
+
+.city-profit-table .roi-col {
+    min-width: 60px;
+}
+
+.selected-city-row {
+    background-color: #ebf8ff;
+    font-weight: 700;
 }
