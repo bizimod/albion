@@ -33,9 +33,6 @@
 ![Refining calculator](docs/images/market-details-city-comparison.png)
 </details>
 
-<details>
-<summary><b>Используемы Технологии (нажмите, чтобы развернуть)</b></summary>
-  
 ### ⚙️ Используемы Технологии:
 - Python
 - Django
@@ -45,10 +42,6 @@
 - Requests 
 - Pillow
 - Albion Online Data API
-</details>
-
-<details>
-<summary><b>Архитектура проекта (нажмите, чтобы развернуть)</b></summary>
 
 ### Архитектура проекта:
 
@@ -71,11 +64,7 @@ albion_proj/
 ├── README.md
 └── requirements.txt
 ```
-</details>
 
-<details>
-<summary><b>Логика работы переработки (Refining) (нажмите, чтобы развернуть)</b></summary>
-  
 ### Логика работы переработки (Refining)
 
 Рецепт переработки состоит из результата и нескольких ингредиентов.
@@ -93,4 +82,3 @@ T4 Planks
 │   └── T3 Logs
 └── T4 Logs
 ```
-</details>
