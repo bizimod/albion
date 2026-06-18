@@ -42,12 +42,12 @@
 ### Архитектура проекта:
 ```text
 albion_proj/
-├── albion_proj/        # Django project settings
-├── crafting/           # Items, artifacts and crafting recipes
-├── docs/               # README screenshots
-├── market/             # Market prices and API integration
-├── refining/           # Refining logic and calculations
-├── resources/          # Resource models
+├── albion_proj/        # настройки Django-проекта
+├── crafting/           # предметы, артефакты и рецепты крафта
+├── docs/               # скриншоты для README
+├── market/             # цены и работа с API
+├── refining/           # переработка и расчёты
+├── resources/          # модели ресурсов
 ├── .gitignore
 ├── manage.py
 ├── README.md
