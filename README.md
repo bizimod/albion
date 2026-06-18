@@ -18,6 +18,7 @@
 
 ❗ Модуль крафта предметов в настоящее время находится в разработке. ❗
 
+
 <details>
 <summary><b> Скриншоты (нажмите, чтобы развернуть)</b></summary>
 
@@ -32,6 +33,7 @@
 # Market details & City Comparison
 ![Refining calculator](docs/images/market-details-city-comparison.png)
 </details>
+
 
 ### ⚙️ Используемы Технологии:
 - Python
