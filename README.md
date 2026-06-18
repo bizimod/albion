@@ -46,7 +46,6 @@
 - `crafting` — предметы, артефакты и рецепты крафта
 - `albion_proj` — настройки Django-проекта
 
-```text
 albion_proj/
 ├── albion_proj/        # настройки Django-проекта
 ├── crafting/           # предметы, артефакты и рецепты крафта
