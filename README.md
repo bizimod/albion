@@ -26,9 +26,15 @@
 # Result
 ![Refining calculator](docs/images/result.png)
 
-# Market details & City Comparison
-![Refining calculator](docs/images/market-details-city-comparison.png)
+<details>
+<summary><b>Market details & City Comparison (нажмите, чтобы развернуть)</b></summary>
 
+![Refining calculator](docs/images/market-details-city-comparison.png)
+</details>
+
+<details>
+<summary><b>Используемы Технологии (нажмите, чтобы развернуть)</b></summary>
+  
 ### ⚙️ Используемы Технологии:
 - Python
 - Django
@@ -38,6 +44,7 @@
 - Requests 
 - Pillow
 - Albion Online Data API
+</details>
 
 <details>
 <summary><b>Архитектура проекта (нажмите, чтобы развернуть)</b></summary>
