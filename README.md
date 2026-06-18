@@ -20,13 +20,13 @@
 
 ### 🖼️ Скриншоты: 
 
-## Refining calculator
+# Refining calculator
 ![Refining calculator](docs/images/refining-calculator-main.png)
 
-## Result
+# Result
 ![Refining calculator](docs/images/result.png)
 
-## Market details & City Comparison
+# Market details & City Comparison
 ![Refining calculator](docs/images/market-details-city-comparison.png)
 
 ### ⚙️ Используемы Технологии:
@@ -39,3 +39,16 @@
 - Pillow
 - Albion Online Data API
 
+### Архитектура проекта:
+```text
+albion_proj/
+├── albion_proj/        # Django project settings
+├── crafting/           # Items, artifacts and crafting recipes
+├── docs/               # README screenshots
+├── market/             # Market prices and API integration
+├── refining/           # Refining logic and calculations
+├── resources/          # Resource models
+├── .gitignore
+├── manage.py
+├── README.md
+└── requirements.txt
