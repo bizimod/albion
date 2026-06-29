@@ -44,7 +44,7 @@ class AlbionMarketService:
                 defaults={
                     "sell_price_min": item_data["sell_price_min"] or 0,
                     "buy_price_max": item_data["buy_price_max"] or 0,
-                    "update_at": update_at,
+                    "updated_at": update_at,
                 },
             )
 
