@@ -1,11 +1,11 @@
-from crafting.models import CraftingRecipe,CraftingIngredient
-from market.models import MarketPrice, ArtifactMarketPrice
+from crafting.models import CraftingRecipe, CraftingIngredient
+from market.models import MarketPrice, ArtifactMarketPrice, ItemMarketPrice
 
 
 class CraftingCalculator:
 
     @staticmethod
-    def calculate(item,city = 'Martlock'):
+    def calculate(item, city='Martlock'):
         recipe = CraftingRecipe.objects.select_related(
             'output_item'
         ).get(output_item=item)
@@ -42,8 +42,16 @@ class CraftingCalculator:
                 "price": price,
                 "total": total,
             })
+        item_price = ItemMarketPrice.objects.get(item=item, city=city).sell_price_min
+        profit = total_cost - item_price
+        roi = 0
 
+        if total_cost > 0:
+            roi = profit / total_cost * 100
         return {
             "ingredients": ingredients_data,
-            "total_cost": total_cost
+            "total_cost": total_cost,
+            "item_price": item_price,
+            "profit": profit,
+            "roi": roi,
         }
