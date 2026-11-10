@@ -19,5 +19,5 @@ class ResourcesAdmin(admin.ModelAdmin):
     @admin.display(description='Image')
     def show_image(self, obj):
         if obj.res_image:
-            return mark_safe(f'<img src="{obj.res_image.url}" width=50')
+            return mark_safe(f'<img src="{obj.res_image.url}" width=50>')
         return 'No image'

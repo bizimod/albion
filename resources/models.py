@@ -23,14 +23,12 @@ class Resource(models.Model):
     tier = models.IntegerField(verbose_name='Tier')
     enchantment = models.IntegerField(default=0, verbose_name='Enchantment')
     type = models.CharField(max_length=10, choices=ResourceType.choices, default=ResourceType.RAW, verbose_name='Type')
-    category = models.CharField(choices=ResourceCategory.choices, verbose_name='Category')
+    category = models.CharField(max_length=30,choices=ResourceCategory.choices, verbose_name='Category')
     res_image = models.ImageField(upload_to='res_image/%Y/%m/%d/', default=None, blank=True, null=True,
                                   verbose_name='Image')
 
     def clean(self):
         super().clean()
-
-        # словарь чтоб подсветить нужное поле
 
         if self.tier < 1 or self.tier > 8:
             raise ValidationError({'tier': 'Tier must be between 1 and 8!'})
@@ -44,10 +42,7 @@ class Resource(models.Model):
     class Meta:
         verbose_name = 'Resource'
         verbose_name_plural = 'Resources'
-        # constraints = [
-        #     models.UniqueConstraint(fields=['item_id', 'tier', 'enchantment', 'type',],
-        #                             name='unique_resource_by_name_tier_enchantment_type'),
-        # ]
+
 
     def __str__(self):
         enchantment_part = f'.{self.enchantment}' if self.enchantment else ''

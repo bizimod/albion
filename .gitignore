@@ -2,11 +2,14 @@
 __pycache__/
 *.py[cod]
 *$py.class
+*.pyo
+*.pyd
 
 # Virtual environment
 venv/
 .venv/
 env/
+djvenv/
 
 # Django
 *.log
@@ -19,14 +22,18 @@ media/
 
 # Static collected files
 staticfiles/
+static_root/
 
 # Environment variables
 .env
 .env.*
+!.env.example
 
 # IDE / editors
 .idea/
 .vscode/
+*.sublime-project
+*.sublime-workspace
 
 # OS files
 .DS_Store
@@ -36,3 +43,23 @@ Thumbs.db
 .coverage
 htmlcov/
 .pytest_cache/
+.tox/
+.nox/
+
+# MyPy / type checkers
+.mypy_cache/
+.pyre/
+.pytype/
+
+# Jupyter / IPython
+.ipynb_checkpoints/
+
+# Build / packaging
+build/
+dist/
+*.egg-info/
+
+# SQLite temporary files
+*.sqlite3-journal
+*.sqlite3-wal
+*.sqlite3-shm
