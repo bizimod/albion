@@ -101,9 +101,9 @@
                         <div class="summary-label">Profit / Прибыль</div>
                         <div class="summary-profit">
                             {% if result.profit > 0 %}
-                                +{{ result.profit|floatformat:-2|intcomma }}
+                                +{{ result.profit|floatformat:0|intcomma }}
                             {% else %}
-                                {{ result.profit|floatformat:-2|intcomma }}
+                                {{ result.profit|floatformat:0|intcomma }}
                             {% endif %}
                             серебра
                         </div>
@@ -120,22 +120,22 @@
                     <div class="summary-grid">
                         <div class="summary-item">
                             <div class="summary-label">Resource cost / Стоимость ресурсов</div>
-                            <div class="summary-value">{{ result.total_cost|floatformat:-2|intcomma }}</div>
+                            <div class="summary-value">{{ result.total_cost|floatformat:0|intcomma }}</div>
                         </div>
 
                         <div class="summary-item">
                             <div class="summary-label">Output total / Выручка до налога</div>
-                            <div class="summary-value">{{ result.output_total|floatformat:-2|intcomma }}</div>
+                            <div class="summary-value">{{ result.output_total|floatformat:0|intcomma }}</div>
                         </div>
 
                         <div class="summary-item">
                             <div class="summary-label">Tax / Налог</div>
-                            <div class="summary-value">{{ result.sell_tax_amount|floatformat:-2|intcomma }}</div>
+                            <div class="summary-value">{{ result.sell_tax_amount|floatformat:0|intcomma }}</div>
                         </div>
 
                         <div class="summary-item">
                             <div class="summary-label">After tax / После налога</div>
-                            <div class="summary-value">{{ result.output_after_tax|floatformat:-2|intcomma }}</div>
+                            <div class="summary-value">{{ result.output_after_tax|floatformat:0|intcomma }}</div>
                         </div>
                     </div>
 
@@ -152,9 +152,9 @@
                                     No / Нет
                                 {% endif %}
                             </p>
-                            <p>Base resource cost / Без комиссии: {{ result.base_total_cost|floatformat:-2|intcomma }} silver</p>
-                            <p>Buy fee included / С комиссией покупки: {{ result.total_cost|floatformat:-2|intcomma }} silver</p>
-                            <p>Output price / Цена готового ресурса: {{ result.output_price|floatformat:-2|intcomma }} silver</p>
+                            <p>Base resource cost / Без комиссии: {{ result.base_total_cost|floatformat:0|intcomma }} silver</p>
+                            <p>Buy fee included / С комиссией покупки: {{ result.total_cost|floatformat:0|intcomma }} silver</p>
+                            <p>Output price / Цена готового ресурса: {{ result.output_price|floatformat:0|intcomma }} silver</p>
                             <p>Sell tax rate / Налог продажи: {{ result.sell_tax_rate|floatformat:-2 }}%</p>
                         </div>
                     </details>
